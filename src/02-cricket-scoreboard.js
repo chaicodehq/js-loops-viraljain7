@@ -9,12 +9,12 @@
  *   - 1 to 6 = runs scored on that ball
  *   - -1 = WICKET! Batsman out ho gaya
  *
- * Rules:
- *   - Loop through each ball in the array using a for loop
- *   - Track: totalRuns, totalBalls (all balls including wickets),
- *     wickets, fours (ball === 4), sixes (ball === 6)
- *   - IMPORTANT: Agar 10 wickets ho gaye, toh STOP! (use break)
- *     Innings khatam. Remaining balls are not counted.
+//  * Rules:
+//  *   - Loop through each ball in the array using a for loop
+//  *   - Track: totalRuns, totalBalls (all balls including wickets),
+//  *     wickets, fours (ball === 4), sixes (ball === 6)
+//  *   - IMPORTANT: Agar 10 wickets ho gaye, toh STOP! (use break)
+//  *     Innings khatam. Remaining balls are not counted.
  *
  * Validation:
  *   - Agar balls ek array nahi hai ya empty array hai,
@@ -32,4 +32,42 @@
  */
 export function cricketScoreboard(balls) {
   // Your code here
+  if (!Array.isArray(balls) || balls.length === 0)
+    return { totalRuns: 0, totalBalls: 0, wickets: 0, fours: 0, sixes: 0 };
+
+  // * Rules:
+  //  *   - Loop through each ball in the array using a for loop
+  //  *   - Track: totalRuns, totalBalls (all balls including wickets),
+  //  *     wickets, fours (ball === 4), sixes (ball === 6)
+  //  *   - IMPORTANT: Agar 10 wickets ho gaye, toh STOP! (use break)
+  //  *     Innings khatam. Remaining balls are not counted.
+  let totalRuns = 0;
+  let totalBalls = 0;
+  let wickets = 0;
+  let fours = 0;
+  let sixes = 0;
+
+  for (const index of balls) {
+    // console.log(index);
+
+    if (wickets === 10) break;
+
+    totalBalls++;
+
+    if (index === -1) {
+      wickets++;
+      continue;
+    } else {
+      totalRuns += index;
+    }
+
+    if (index === 4) {
+      fours++;
+    }
+    if (index === 6) {
+      sixes++;
+    }
+  }
+
+  return { totalRuns, totalBalls, wickets, fours, sixes };
 }
