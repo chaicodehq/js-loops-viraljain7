@@ -5,18 +5,18 @@
  * ke hisaab se rate change hota hai. Aur agar passenger ne waiting karaya,
  * toh uska bhi charge lagta hai.
  *
- * Fare calculation (use while loop, process km by km):
- *   - First 1 km (minimum fare): Rs 30
- *   - Km 2 to 5 (i.e., next 4 km): Rs 15 per km
- *   - Beyond 5 km: Rs 10 per km
- *   - Distance ko Math.ceil() karo (e.g., 3.2 km = 4 km charge)
- *
- * Waiting charges:
- *   - Rs 5 per 2 minutes of waiting
- *   - Waiting minutes ko bhi Math.ceil() karo for pairs
- *     (e.g., 3 min = 2 pairs = Rs 10, 5 min = 3 pairs = Rs 15)
- *   - If waitingMinutes is not provided, default is 0
- *
+//  * Fare calculation (use while loop, process km by km):
+//  *   - First 1 km (minimum fare): Rs 30
+//  *   - Km 2 to 5 (i.e., next 4 km): Rs 15 per km
+//  *   - Beyond 5 km: Rs 10 per km
+//  *   - Distance ko Math.ceil() karo (e.g., 3.2 km = 4 km charge)
+//  *
+//  * Waiting charges:
+//  *   - Rs 5 per 2 minutes of waiting
+//  *   - Waiting minutes ko bhi Math.ceil() karo for pairs
+//  *     (e.g., 3 min = 2 pairs = Rs 10, 5 min = 3 pairs = Rs 15)
+//  *   - If waitingMinutes is not provided, default is 0
+//  *
  * Validation:
  *   - Agar distance ek positive number nahi hai, return -1
  *   - Agar waitingMinutes negative hai, return -1
@@ -33,4 +33,38 @@
  */
 export function calculateAutoFare(distance, waitingMinutes = 0) {
   // Your code here
+
+  if (typeof distance!=="number"||typeof waitingMinutes!=="number"|| distance <= 0 || waitingMinutes < 0) return -1;
+
+  //  * Fare calculation (use while loop, process km by km):
+  //  *   - First 1 km (minimum fare): Rs 30
+  //  *   - Km 2 to 5 (i.e., next 4 km): Rs 15 per km
+  //  *   - Beyond 5 km: Rs 10 per km
+  //  *   - Distance ko Math.ceil() karo (e.g., 3.2 km = 4 km charge)
+  //  *
+  //  * Waiting charges:
+  //  *   - Rs 5 per 2 minutes of waiting
+  //  *   - Waiting minutes ko bhi Math.ceil() karo for pairs
+  //  *     (e.g., 3 min = 2 pairs = Rs 10, 5 min = 3 pairs = Rs 15)
+  //  *   - If waitingMinutes is not provided, default is 0
+  //  *
+
+  let totalDistance=Math.ceil(distance);
+  let waitCharge=0;
+  let FareCharge=0;
+
+  if(totalDistance===1){
+    FareCharge=30;
+  }else if(totalDistance<=5){
+    FareCharge=30+(totalDistance-1)*15;
+  }else{
+    FareCharge=90+(totalDistance-5)*10;
+  }
+
+  if(waitingMinutes){
+    waitCharge=Math.ceil(waitingMinutes/2)*5;
+  }
+
+  return FareCharge+waitCharge;
+
 }
