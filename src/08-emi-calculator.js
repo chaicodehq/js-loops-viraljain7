@@ -3,19 +3,19 @@
  *
  * Rohit ne naya phone liya hai EMI pe! Usse jaanna hai ki kitne months
  * lagenge phone ka poora paisa chukane mein. Har month interest lagta hai
- * remaining amount pe, aur phir EMI deduct hoti hai.
+ * remaining_balance amount pe, aur phir EMI deduct hoti hai.
  *
  * Rules (use while loop):
- *   - Start with principal amount (remaining balance)
- *   - Each month:
- *     1. Calculate interest = remaining * monthlyRate (monthlyRate is like 0.02 for 2%)
- *     2. Add interest to remaining: remaining = remaining + interest
- *     3. Deduct EMI: remaining = remaining - emi
- *     4. Increment months count
- *     5. Add emi to totalPaid
- *   - Continue while remaining > 0
- *   - In the last month, if remaining < emi, just pay what's left
- *     (totalPaid += remaining before deduction, not full emi)
+//  *   - Start with principal amount (remaining balance)
+//  *   - Each month:
+//  *     1. Calculate interest = remaining * monthlyRate (monthlyRate is like 0.02 for 2%)
+//  *     2. Add interest to remaining: remaining = remaining + interest
+//  *     3. Deduct EMI: remaining = remaining - emi
+//  *     4. Increment months count
+//  *     5. Add emi to totalPaid
+//  *   - Continue while remaining > 0
+//  *   - In the last month, if remaining < emi, just pay what's left
+//  *     (totalPaid += remaining before deduction, not full emi)
  *
  * Infinite loop protection:
  *   - Agar EMI <= first month's interest (principal * monthlyRate),
@@ -43,4 +43,61 @@
  */
 export function calculateEMI(principal, monthlyRate, emi) {
   // Your code here
+
+  if (principal <= 0 || monthlyRate <= 0 || emi <= 0)
+    return { months: -1, totalPaid: -1, totalInterest: -1 };
+
+  if (emi <= principal * monthlyRate)
+    return { months: -1, totalPaid: -1, totalInterest: -1 };
+  if (typeof principal === "string")
+    return { months: -1, totalPaid: -1, totalInterest: -1 };
+
+  let months = 0;
+  let totalPaid = 0;
+  let totalInterest = 0;
+
+  let remainingBalance = principal;
+
+  while (remainingBalance > 0) {
+    // 1. Calculate interest
+//  *   - Start with principal amount (remaining balance)
+//  *   - Each month:
+//  *     1. Calculate interest = remaining * monthlyRate (monthlyRate is like 0.02 for 2%)
+//  *     2. Add interest to remaining: remaining = remaining + interest
+//  *     3. Deduct EMI: remaining = remaining - emi
+//  *     4. Increment months count
+//  *     5. Add emi to totalPaid
+//  *   - Continue while remaining > 0
+//  *   - In the last month, if remaining < emi, just pay what's left
+//  *     (totalPaid += remaining before deduction, not full emi)
+
+
+    let interest = remainingBalance * monthlyRate;
+
+    totalInterest += interest;
+
+    remainingBalance += interest;
+
+    // 3. Last month case
+    if (remainingBalance <= emi) {
+      totalPaid += remainingBalance;
+      months++;
+      break;
+    }
+
+    // 4. Deduct EMI
+    remainingBalance -= emi;
+    totalPaid += emi;
+
+    // 5. Increment month
+    months++;
+  }
+
+  totalInterest = Number(totalInterest.toFixed(2));
+
+  return {
+    months,
+    totalPaid,
+    totalInterest,
+  };
 }

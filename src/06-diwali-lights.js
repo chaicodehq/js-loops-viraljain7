@@ -39,4 +39,52 @@
  */
 export function diwaliLightsPlan(lightStrings, budget) {
   // Your code here
+
+  const  selected= [];
+  let totalLength= 0
+  let totalCost= 0
+
+  if (!Array.isArray(lightStrings) || lightStrings.length === 0)
+    return { selected, totalLength, totalCost };
+  if (typeof budget!=="number"|| budget <= 0) return { selected, totalLength, totalCost };
+
+//    * Color rates (per meter):
+//  *   - "golden" = Rs 50/meter
+//  *   - "multicolor" = Rs 40/meter
+//  *   - "white" = Rs 30/meter
+//  *   - Any other color = Rs 35/meter
+
+let priceList={
+  "golden":50,
+  "multicolor":40,
+  "white":30,
+}
+
+
+for (const element of lightStrings) {
+  let {color,length}=element;
+
+  selected.push({
+    "color":color,
+    "cost":priceList[color]?priceList[color]*length:35*length,
+    "length":length
+  })
+totalLength += length;
+  totalCost+=priceList[color]?priceList[color]*length:35*length;
+}
+
+while(totalCost>budget){
+  let removeItem=selected.pop();
+  console.log(removeItem)
+  let {color,length}=removeItem;
+  totalLength -= length;
+totalCost-=priceList[color]?priceList[color]*length:35*length;
+}
+
+
+
+
+console.log(selected, totalLength, totalCost)
+return { selected, totalLength, totalCost }
+
 }

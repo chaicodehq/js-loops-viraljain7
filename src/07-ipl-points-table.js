@@ -21,21 +21,81 @@
  *     2. If points are equal, by team name ASCENDING (alphabetical)
  *
  * Validation:
- *   - Agar matches array nahi hai ya empty hai, return []
+//  *   - Agar matches array nahi hai ya empty hai, return []
  *
  * @param {Array<{team1: string, team2: string, result: string, winner?: string}>} matches
  * @returns {Array<{team: string, played: number, won: number, lost: number, tied: number, noResult: number, points: number}>}
  *
  * @example
- *   iplPointsTable([
- *     { team1: "CSK", team2: "MI", result: "win", winner: "CSK" },
- *     { team1: "RCB", team2: "CSK", result: "tie" },
- *   ])
- *   // CSK: played=2, won=1, tied=1, points=3
- *   // MI: played=1, won=0, lost=1, points=0
- *   // RCB: played=1, tied=1, points=1
- *   // Sorted: CSK(3), RCB(1), MI(0)
+//  *   iplPointsTable([
+//  *     { team1: "CSK", team2: "MI", result: "win", winner: "CSK" },
+//  *     { team1: "RCB", team2: "CSK", result: "tie" },
+//  *   ])
+//  *   // CSK: played=2, won=1, tied=1, points=3
+//  *   // MI: played=1, won=0, lost=1, points=0
+//  *   // RCB: played=1, tied=1, points=1
+//  *   // Sorted: CSK(3), RCB(1), MI(0)
  */
 export function iplPointsTable(matches) {
-  // Your code here
+//  *   - Agar matches array nahi hai ya empty hai, return []
+  
+  if (!Array.isArray(matches) || matches.length === 0) 
+    return [];
+
+  const pointsTable = []; 
+
+  function getTeam(name) {
+    let team = pointsTable.find(t => t.team === name);
+
+    if (!team) {
+      team = { team: name, played: 0, won: 0, lost: 0, tied: 0, noResult: 0, points: 0 };
+      pointsTable.push(team); 
+    }
+
+    return team;
+  }
+
+  for (let i = 0; i < matches.length; i++) {
+    const { team1, team2, result, winner } = matches[i];
+
+    const t1 = getTeam(team1);
+    const t2 = getTeam(team2);
+
+    t1.played++;
+    t2.played++;
+
+    if (result === "tie") {
+      t1.tied++;  
+       t1.points++;
+      t2.tied++;  
+       t2.points++;
+
+    } else if (result === "no_result") {
+      t1.noResult++;
+        t1.points++;
+      t2.noResult++; 
+       t2.points++;
+
+    } else if (result === "win") {
+      const winTeam  = pointsTable.find(t => t.team === winner);
+      const loseTeam = winner === team1 ? t2 : t1;
+
+      winTeam.won++;    winTeam.points += 2;
+      loseTeam.lost++;
+    }
+  }
+
+  return pointsTable.sort((a, b) => {
+    if (b.points !== a.points) return b.points - a.points;
+    return a.team.localeCompare(b.team);
+  });
+
+  // *   iplPointsTable([
+//  *     { team1: "CSK", team2: "MI", result: "win", winner: "CSK" },
+//  *     { team1: "RCB", team2: "CSK", result: "tie" },
+//  *   ])
+//  *   // CSK: played=2, won=1, tied=1, points=3
+//  *   // MI: played=1, won=0, lost=1, points=0
+//  *   // RCB: played=1, tied=1, points=1
+//  *   // Sorted: CSK(3), RCB(1), MI(0)
 }

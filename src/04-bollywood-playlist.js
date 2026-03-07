@@ -23,7 +23,7 @@
  *
  * @example
  *   buildPlaylist([240, 180, 300, 200], 600)
- *   // => { count: 2, totalDuration: 420 }
+ *   // => { count: 2, totalDuration: 420 }4
  *   // 240 + 180 = 420, next song 300 would make 720 > 600, so stop
  *
  *   buildPlaylist([100, -50, 200, 150], 400)
@@ -35,4 +35,31 @@
  */
 export function buildPlaylist(songs, maxDuration) {
   // Your code here
+
+  if (
+    !Array.isArray(songs) ||
+    typeof maxDuration !== "number" ||
+    maxDuration < 0
+  )
+    return { count: 0, totalDuration: 0 };
+
+  let count = 0;
+  let totalDuration = 0;
+
+  for (let index = 0; index < songs.length; index++) {
+    const element = songs[index];
+   // Skip invalid songs (negative, zero, NaN, string, etc.)
+    if (typeof element !== "number" || !Number.isFinite(element) || element <= 0) {
+      continue;
+    }
+
+    // 🔥 MAIN FIX: Check BEFORE adding
+    if (totalDuration + element > maxDuration) {
+      break;
+    }
+
+    count++;
+    totalDuration += element;
+  }
+  return { count, totalDuration };
 }
